@@ -31,7 +31,7 @@ jobs:
       - name: SonarQube Scanner
         uses: ItsEcholot/sonarqube-action@v0.0.2
         with:
-          host: https://weilbyte.net
+          host: https://sonar.weilbyte.net
           login: ${{ secrets.token }}
 
 
