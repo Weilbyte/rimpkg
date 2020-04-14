@@ -24,3 +24,15 @@ jobs:
       uses: actions/checkout@v2
     - name: Build
       run: go build -v .
+  scan:
+    runs-on: ubuntu-latest
+    name: Analysis 
+    steps:
+      - name: SonarQube Scanner
+        uses: ItsEcholot/sonarqube-action@v0.0.2
+        with:
+          host: https://weilbyte.net
+          login: ${{ secrets.token }}
+
+
+      
