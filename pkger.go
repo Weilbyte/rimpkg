@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func packageMod(modDir string) {
@@ -41,6 +42,9 @@ func addToZip(writer *zip.Writer, dir string, innerPath string) {
 
 	for _, file := range files {
 		if file.IsDir() {
+			if strings.ToLower(file.Name()) == "src" || strings.ToLower(file.Name()) == "source" {
+				continue
+			}
 			addToZip(writer, filepath.Join(dir, file.Name()), filepath.Join(innerPath, file.Name()))
 		} else {
 			data, err := ioutil.ReadFile(filepath.Join(dir, file.Name()))

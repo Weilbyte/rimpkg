@@ -54,7 +54,7 @@ func GetOptions() optionStruct {
 	gameDirPtr := flag.String("gameDir", steam.FindGameDir(), "Path to the Rimworld game directory")
 	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory")
 	linkPtr := flag.Bool("link", false, "Link mod directory to game directory")
-	pkgPtr := flag.Bool("pkg", false, "Package mod into archive")
+	pkgPtr := flag.Bool("pkg", false, "Package mod into archive. Skips source folders")
 	flag.Parse()
 	options := optionStruct{
 		gameDir: *gameDirPtr,
