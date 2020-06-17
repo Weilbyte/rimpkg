@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"path"
+	"path/filepath"
 )
 
 func checkExisting(path string) {
@@ -34,13 +34,13 @@ func link(gameDir string, modDir string) {
 	if err != nil {
 		fmt.Printf("Error retrieving mod name: %s\n", err)
 	}
-	var gameDirModPath string = path.Join(gameDir, "Mods", modName)
+	var gameDirModPath string = filepath.Join(gameDir, "Mods", modName)
 	checkExisting(gameDirModPath)
 
 	interruptChannel := make(chan os.Signal, 1)
 	signal.Notify(interruptChannel, os.Interrupt)
 
-	os.Symlink(modDir,gameDirModPath)
+	os.Symlink(modDir, gameDirModPath)
 	fmt.Printf("Successfully linked.\nUse ^C to unlink and exit.\n")
 
 	for {

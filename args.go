@@ -5,15 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 )
 
 type optionStruct struct {
 	gameDir string
-	modDir string
-	link bool
-	pkg string
+	modDir  string
+	link    bool
+	pkg     string
 }
 
 func currentDirectory() string {
@@ -25,14 +24,14 @@ func currentDirectory() string {
 }
 
 func absolutize(path string) string {
-	absolutePath, _ :=filepath.Abs(path)
+	absolutePath, _ := filepath.Abs(path)
 	return absolutePath
 }
 
-func validateOptions(options optionStruct) (error) {
+func validateOptions(options optionStruct) error {
 	var error error = nil
 	if (options.link || options.pkg != "") && (options.gameDir != "") {
-		if _, err := os.Stat(path.Join(options.gameDir, "Mods")); err != nil {
+		if _, err := os.Stat(filepath.Join(options.gameDir, "Mods")); err != nil {
 			if os.IsNotExist(err) {
 				error = errors.New("Game directory path is incorrect")
 			}
@@ -50,15 +49,15 @@ func validateOptions(options optionStruct) (error) {
 }
 
 func GetOptions() optionStruct {
-	gameDirPtr := flag.String("gameDir","","Path to the Rimworld game directory")
-	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory" )
+	gameDirPtr := flag.String("gameDir", "", "Path to the Rimworld game directory")
+	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory")
 	linkPtr := flag.Bool("link", false, "Link mod directory to game directory")
-	pkgPtr := flag.String("pkg", "", "Package mod into archive" )
+	pkgPtr := flag.String("pkg", "", "Package mod into archive")
 	flag.Parse()
 	options := optionStruct{
 		gameDir: *gameDirPtr,
 		modDir:  *modDirPtr,
-		link:   *linkPtr,
+		link:    *linkPtr,
 		pkg:     *pkgPtr,
 	}
 	options.gameDir = absolutize(options.gameDir)
