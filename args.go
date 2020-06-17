@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/weilbyte/rimpkg/steam"
 )
 
 type optionStruct struct {
@@ -49,7 +51,7 @@ func validateOptions(options optionStruct) error {
 }
 
 func GetOptions() optionStruct {
-	gameDirPtr := flag.String("gameDir", "", "Path to the Rimworld game directory")
+	gameDirPtr := flag.String("gameDir", steam.FindGameDir(), "Path to the Rimworld game directory")
 	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory")
 	linkPtr := flag.Bool("link", false, "Link mod directory to game directory")
 	pkgPtr := flag.Bool("pkg", false, "Package mod into archive")
