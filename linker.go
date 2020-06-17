@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 )
 
 func checkExisting(path string) {
@@ -16,7 +17,7 @@ func checkExisting(path string) {
 		inputReader := bufio.NewReader(os.Stdin)
 		fmt.Println("Attempt folder removal? [Y/N]")
 		inputText, _ := inputReader.ReadString('\n')
-		if inputText == "Y" {
+		if strings.Contains(inputText, "Y") {
 			err := os.Remove(path)
 			if err != nil {
 				fmt.Printf("Removal failed: %s", err)
@@ -40,7 +41,15 @@ func link(gameDir string, modDir string) {
 	interruptChannel := make(chan os.Signal, 1)
 	signal.Notify(interruptChannel, os.Interrupt)
 
-	os.Symlink(modDir, gameDirModPath)
+	err = os.Symlink(modDir, gameDirModPath)
+	if err != nil {
+		if strings.Contains(err.Error(), "privilege") {
+			fmt.Println("Symlink creation requires administrative rights.")
+		} else {
+			fmt.Printf("Unexpected error while attempting to creat symlink: %s", err)
+		}
+		os.Exit(1)
+	}
 	fmt.Printf("Successfully linked.\nUse ^C to unlink and exit.\n")
 
 	for {
