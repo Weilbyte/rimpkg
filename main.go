@@ -7,5 +7,7 @@ func main() {
 		link(options.gameDir, options.modDir)
 	}
 
-
+	if options.pkg {
+		packageMod(options.modDir)
+	}
 }

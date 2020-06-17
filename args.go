@@ -12,7 +12,7 @@ type optionStruct struct {
 	gameDir string
 	modDir  string
 	link    bool
-	pkg     string
+	pkg     bool
 }
 
 func currentDirectory() string {
@@ -30,7 +30,7 @@ func absolutize(path string) string {
 
 func validateOptions(options optionStruct) error {
 	var error error = nil
-	if (options.link || options.pkg != "") && (options.gameDir != "") {
+	if (options.link || options.pkg) && (options.gameDir != "") {
 		if _, err := os.Stat(filepath.Join(options.gameDir, "Mods")); err != nil {
 			if os.IsNotExist(err) {
 				error = errors.New("Game directory path is incorrect")
@@ -52,7 +52,7 @@ func GetOptions() optionStruct {
 	gameDirPtr := flag.String("gameDir", "", "Path to the Rimworld game directory")
 	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory")
 	linkPtr := flag.Bool("link", false, "Link mod directory to game directory")
-	pkgPtr := flag.String("pkg", "", "Package mod into archive")
+	pkgPtr := flag.Bool("pkg", false, "Package mod into archive")
 	flag.Parse()
 	options := optionStruct{
 		gameDir: *gameDirPtr,
