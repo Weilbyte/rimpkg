@@ -7,6 +7,10 @@ func main() {
 		link(options.gameDir, options.modDir)
 	}
 
+	if options.fetchLib != "" {
+		fetch(options.gameDir, options.fetchLib)
+	}
+
 	if options.pkg {
 		packageMod(options.modDir)
 	}

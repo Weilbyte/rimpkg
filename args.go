@@ -11,10 +11,11 @@ import (
 )
 
 type optionStruct struct {
-	gameDir string
-	modDir  string
-	link    bool
-	pkg     bool
+	gameDir  string
+	modDir   string
+	link     bool
+	pkg      bool
+	fetchLib string
 }
 
 func currentDirectory() string {
@@ -32,7 +33,7 @@ func absolutize(path string) string {
 
 func validateOptions(options optionStruct) error {
 	var error error = nil
-	if (options.link || options.pkg) && (options.gameDir != "") {
+	if (options.link || options.pkg || options.fetchLib != "") && (options.gameDir != "") {
 		if _, err := os.Stat(filepath.Join(options.gameDir, "Mods")); err != nil {
 			if os.IsNotExist(err) {
 				error = errors.New("Game directory path is incorrect")
@@ -55,15 +56,18 @@ func GetOptions() optionStruct {
 	modDirPtr := flag.String("modDir", currentDirectory(), "Path to the mod directory")
 	linkPtr := flag.Bool("link", false, "Link mod directory to game directory")
 	pkgPtr := flag.Bool("pkg", false, "Package mod into archive. Skips source folders")
+	fetchLibPtr := flag.String("fetchLib", "", "Copy game DLLs into folder")
 	flag.Parse()
 	options := optionStruct{
-		gameDir: *gameDirPtr,
-		modDir:  *modDirPtr,
-		link:    *linkPtr,
-		pkg:     *pkgPtr,
+		gameDir:  *gameDirPtr,
+		modDir:   *modDirPtr,
+		link:     *linkPtr,
+		pkg:      *pkgPtr,
+		fetchLib: *fetchLibPtr,
 	}
 	options.gameDir = absolutize(options.gameDir)
 	options.modDir = absolutize(options.modDir)
+	options.fetchLib = absolutize(options.fetchLib)
 
 	if err := validateOptions(options); err != nil {
 		fmt.Printf("Error: %s\n", err)
